@@ -1,18 +1,24 @@
 import React from 'react';
-import { ScrollView, StyleSheet, Platform } from 'react-native';
+import { ScrollView, StyleSheet } from 'react-native';
 import { useTheme } from '../src/hooks/useTheme';
 import { Header } from '../src/components/Header';
 import { Footer } from '../src/components/Footer';
 import { WhatsAppFAB } from '../src/components/WhatsAppFAB';
+import { ScrollToTopFAB } from '../src/components/ScrollToTopFAB';
 import {
   HeroSection,
   ServicesSection,
-  QuoteSection,
+  CapabilitiesSection,
+  ProcessSection,
+  CTABannerSection,
   ProjectsSection,
   BeforeAfterSection,
+  FounderQuoteSection,
   PackagesSection,
   StatsSection,
   TestimonialsSection,
+  TeamSection,
+  QuoteSection,
   BlogSection,
   ContactSection,
 } from '../src/sections';
@@ -30,17 +36,23 @@ export default function HomeScreen() {
       >
         <HeroSection />
         <ServicesSection />
-        <QuoteSection />
+        <CapabilitiesSection />
+        <ProcessSection />
+        <CTABannerSection />
         <ProjectsSection />
         <BeforeAfterSection />
+        <FounderQuoteSection />
         <PackagesSection />
         <StatsSection />
         <TestimonialsSection />
+        <TeamSection />
+        <QuoteSection />
         <BlogSection />
         <ContactSection />
         <Footer />
       </ScrollView>
       <WhatsAppFAB />
+      <ScrollToTopFAB />
     </>
   );
 }

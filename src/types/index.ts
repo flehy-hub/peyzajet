@@ -3,6 +3,8 @@ export interface Service {
   title: string;
   description: string;
   icon: string;
+  image: string;
+  category?: string;
 }
 
 export interface Project {
@@ -27,6 +29,10 @@ export interface Package {
   id: string;
   name: string;
   price: string;
+  originalPrice?: string;
+  discount?: string;
+  commercialPrice?: string;
+  commercialOriginalPrice?: string;
   period: string;
   features: string[];
   popular?: boolean;
@@ -49,6 +55,13 @@ export interface BlogPost {
   image: string;
   date: string;
   category: string;
+}
+
+export interface TeamMember {
+  id: string;
+  name: string;
+  role: string;
+  avatar: string;
 }
 
 export interface QuoteFormData {

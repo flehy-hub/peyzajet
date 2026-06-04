@@ -14,6 +14,7 @@ export function BeforeAfterSection() {
   return (
     <SectionWrapper id="before-after" background="alt">
       <SectionTitle
+        overline="Dönüşüm"
         title="Öncesi ve Sonrası"
         subtitle="Projelerimizin dönüşüm hikayelerini keşfedin"
       />

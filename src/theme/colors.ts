@@ -2,6 +2,7 @@ export const Colors = {
   light: {
     primary: '#6FA43A',
     primaryDark: '#5A8A2E',
+    primaryLightBg: 'rgba(111, 164, 58, 0.05)',
     secondary: '#1F3A2E',
     accent: '#D4B06A',
     background: '#F8F8F5',
@@ -13,6 +14,7 @@ export const Colors = {
     border: '#E0E0DB',
     overlay: 'rgba(31, 58, 46, 0.7)',
     cardShadow: 'rgba(0,0,0,0.08)',
+    strikethrough: '#999999',
     white: '#FFFFFF',
     black: '#000000',
     success: '#4CAF50',
@@ -22,6 +24,7 @@ export const Colors = {
   dark: {
     primary: '#7FBF44',
     primaryDark: '#6FA43A',
+    primaryLightBg: 'rgba(127, 191, 68, 0.05)',
     secondary: '#A8D5A0',
     accent: '#D4B06A',
     background: '#0F1A14',
@@ -33,6 +36,7 @@ export const Colors = {
     border: '#2A4032',
     overlay: 'rgba(15, 26, 20, 0.85)',
     cardShadow: 'rgba(0,0,0,0.3)',
+    strikethrough: '#777770',
     white: '#FFFFFF',
     black: '#000000',
     success: '#66BB6A',

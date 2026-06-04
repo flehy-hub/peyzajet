@@ -29,7 +29,8 @@ export function ContactSection() {
   return (
     <SectionWrapper id="iletisim">
       <SectionTitle
-        title="İletişim"
+        overline="İletişim"
+        title="Bizimle İletişime Geçin"
         subtitle="Ücretsiz keşif ve teklif için bize ulaşın"
       />
 

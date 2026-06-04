@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Pressable, Text, StyleSheet, Platform } from 'react-native';
+import { Pressable, Text, View, StyleSheet, Platform } from 'react-native';
 import { useTheme } from '../hooks/useTheme';
 import { Fonts, BorderRadius, Spacing } from '../theme';
 
@@ -8,9 +8,11 @@ interface Props {
   onPress?: () => void;
   variant?: 'primary' | 'secondary' | 'outline' | 'white';
   size?: 'sm' | 'md' | 'lg';
+  icon?: 'arrow' | 'phone';
+  fullWidth?: boolean;
 }
 
-export function Button({ title, onPress, variant = 'primary', size = 'md' }: Props) {
+export function Button({ title, onPress, variant = 'primary', size = 'md', icon, fullWidth }: Props) {
   const { colors } = useTheme();
   const [hovered, setHovered] = useState(false);
 
@@ -36,6 +38,8 @@ export function Button({ title, onPress, variant = 'primary', size = 'md' }: Pro
     onMouseLeave: () => setHovered(false),
   } : {};
 
+  const displayText = icon === 'arrow' ? `${title} →` : icon === 'phone' ? `📞 ${title}` : title;
+
   return (
     <Pressable
       onPress={onPress}
@@ -48,11 +52,12 @@ export function Button({ title, onPress, variant = 'primary', size = 'md' }: Pro
           paddingVertical: paddingV,
           paddingHorizontal: paddingH,
           transform: [{ scale: hovered ? 1.03 : 1 }],
+          width: fullWidth ? '100%' : undefined,
         },
       ]}
     >
       <Text style={[styles.text, { color: textColor, fontSize }]}>
-        {title}
+        {displayText}
       </Text>
     </Pressable>
   );
@@ -60,7 +65,7 @@ export function Button({ title, onPress, variant = 'primary', size = 'md' }: Pro
 
 const styles = StyleSheet.create({
   button: {
-    borderRadius: BorderRadius.md,
+    borderRadius: BorderRadius.full,
     borderWidth: 2,
     alignItems: 'center',
     justifyContent: 'center',

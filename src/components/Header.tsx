@@ -65,7 +65,7 @@ export function Header() {
               onPress={() => scrollToSection('#iletisim')}
               style={[styles.ctaButton, { backgroundColor: colors.primary }]}
             >
-              <Text style={styles.ctaText}>Teklif Al</Text>
+              <Text style={styles.ctaText}>Teklif Al {'→'}</Text>
             </Pressable>
           )}
 
@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
   ctaButton: {
     paddingHorizontal: Spacing.lg,
     paddingVertical: 10,
-    borderRadius: BorderRadius.md,
+    borderRadius: BorderRadius.full,
     ...Platform.select({ web: { cursor: 'pointer' } as any }),
   },
   ctaText: {

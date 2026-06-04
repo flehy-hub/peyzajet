@@ -13,7 +13,8 @@ export function BlogSection() {
   return (
     <SectionWrapper id="blog">
       <SectionTitle
-        title="Blog"
+        overline="Blog"
+        title="Peyzaj Dünyasından"
         subtitle="Peyzaj ve bahçe bakımı hakkında faydalı bilgiler"
       />
       <View style={[styles.grid, { flexDirection: isMobile ? 'column' : 'row' }]}>

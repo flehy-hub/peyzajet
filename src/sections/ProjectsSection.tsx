@@ -21,6 +21,7 @@ export function ProjectsSection() {
   return (
     <SectionWrapper id="projeler">
       <SectionTitle
+        overline="Projelerimiz"
         title="Tamamlanan Projelerimiz"
         subtitle="Son dönemde hayata geçirdiğimiz peyzaj projeleri"
       />

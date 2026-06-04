@@ -1,10 +1,15 @@
 export { HeroSection } from './HeroSection';
 export { ServicesSection } from './ServicesSection';
+export { CapabilitiesSection } from './CapabilitiesSection';
+export { ProcessSection } from './ProcessSection';
+export { CTABannerSection } from './CTABannerSection';
 export { QuoteSection } from './QuoteSection';
 export { ProjectsSection } from './ProjectsSection';
 export { BeforeAfterSection } from './BeforeAfterSection';
+export { FounderQuoteSection } from './FounderQuoteSection';
 export { PackagesSection } from './PackagesSection';
 export { StatsSection } from './StatsSection';
 export { TestimonialsSection } from './TestimonialsSection';
+export { TeamSection } from './TeamSection';
 export { BlogSection } from './BlogSection';
 export { ContactSection } from './ContactSection';

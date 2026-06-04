@@ -30,8 +30,9 @@ export function TestimonialsSection() {
   return (
     <SectionWrapper id="yorumlar" background="alt">
       <SectionTitle
-        title="Müşteri Yorumları"
-        subtitle="Müşterilerimizin deneyimleri"
+        overline="Müşteri Yorumları"
+        title="Müşterilerimizin Deneyimleri"
+        subtitle="Projelerimizden memnun kalan müşterilerimiz"
       />
 
       <View style={styles.sliderContainer}>

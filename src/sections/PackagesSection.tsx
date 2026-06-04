@@ -9,30 +9,65 @@ import { PACKAGES } from '../constants/data';
 import { Fonts, Spacing, BorderRadius } from '../theme';
 
 export function PackagesSection() {
+  const { colors } = useTheme();
   const { isMobile } = useResponsive();
+  const [pricingType, setPricingType] = useState<'residential' | 'commercial'>('residential');
 
   return (
     <SectionWrapper id="paketler">
       <SectionTitle
+        overline="Paketlerimiz"
         title="Bakım Paketlerimiz"
         subtitle="Bahçenize en uygun bakım paketini seçin"
       />
+
+      {/* Toggle */}
+      <View style={styles.toggleContainer}>
+        <Pressable
+          onPress={() => setPricingType('residential')}
+          style={[
+            styles.toggleBtn,
+            styles.toggleLeft,
+            { backgroundColor: pricingType === 'residential' ? colors.primary : colors.surfaceAlt },
+          ]}
+        >
+          <Text style={[styles.toggleText, { color: pricingType === 'residential' ? '#FFFFFF' : colors.textSecondary }]}>
+            Konut
+          </Text>
+        </Pressable>
+        <Pressable
+          onPress={() => setPricingType('commercial')}
+          style={[
+            styles.toggleBtn,
+            styles.toggleRight,
+            { backgroundColor: pricingType === 'commercial' ? colors.primary : colors.surfaceAlt },
+          ]}
+        >
+          <Text style={[styles.toggleText, { color: pricingType === 'commercial' ? '#FFFFFF' : colors.textSecondary }]}>
+            Ticari
+          </Text>
+        </Pressable>
+      </View>
+
       <View style={[styles.grid, { flexDirection: isMobile ? 'column' : 'row' }]}>
         {PACKAGES.map((pkg) => (
-          <PackageCard key={pkg.id} pkg={pkg} />
+          <PackageCard key={pkg.id} pkg={pkg} pricingType={pricingType} />
         ))}
       </View>
     </SectionWrapper>
   );
 }
 
-function PackageCard({ pkg }: { pkg: typeof PACKAGES[0] }) {
+function PackageCard({ pkg, pricingType }: { pkg: typeof PACKAGES[0]; pricingType: 'residential' | 'commercial' }) {
   const { colors } = useTheme();
   const [hovered, setHovered] = useState(false);
   const webHover = Platform.OS === 'web' ? {
     onMouseEnter: () => setHovered(true),
     onMouseLeave: () => setHovered(false),
   } : {};
+
+  const currentPrice = pricingType === 'commercial' ? (pkg.commercialPrice || pkg.price) : pkg.price;
+  const currentOriginal = pricingType === 'commercial' ? (pkg.commercialOriginalPrice || pkg.originalPrice) : pkg.originalPrice;
 
   return (
     <View
@@ -62,14 +97,27 @@ function PackageCard({ pkg }: { pkg: typeof PACKAGES[0] }) {
         </View>
       )}
 
+      {pkg.discount && (
+        <View style={styles.discountBadge}>
+          <Text style={styles.discountText}>{pkg.discount} İndirim</Text>
+        </View>
+      )}
+
       <View style={[styles.colorStrip, { backgroundColor: pkg.color }]} />
 
       <Text style={[styles.packageName, { color: colors.text }]}>{pkg.name}</Text>
 
       <View style={styles.priceContainer}>
-        <Text style={[styles.currency, { color: colors.primary }]}>₺</Text>
-        <Text style={[styles.price, { color: colors.text }]}>{pkg.price}</Text>
-        <Text style={[styles.period, { color: colors.textMuted }]}>{pkg.period}</Text>
+        {currentOriginal && (
+          <Text style={[styles.originalPrice, { color: colors.strikethrough }]}>
+            ₺{currentOriginal}
+          </Text>
+        )}
+        <View style={styles.priceRow}>
+          <Text style={[styles.currency, { color: colors.primary }]}>₺</Text>
+          <Text style={[styles.price, { color: colors.text }]}>{currentPrice}</Text>
+          <Text style={[styles.period, { color: colors.textMuted }]}>{pkg.period}</Text>
+        </View>
       </View>
 
       <View style={styles.features}>
@@ -85,12 +133,42 @@ function PackageCard({ pkg }: { pkg: typeof PACKAGES[0] }) {
         title="Teklif Al"
         variant={pkg.popular ? 'primary' : 'outline'}
         size="md"
+        icon="arrow"
       />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  toggleContainer: {
+    flexDirection: 'row',
+    alignSelf: 'center',
+    marginBottom: Spacing.xl,
+  },
+  toggleBtn: {
+    paddingHorizontal: Spacing.xl,
+    paddingVertical: Spacing.md,
+    ...Platform.select({
+      web: {
+        cursor: 'pointer',
+        transitionDuration: '200ms',
+        transitionProperty: 'all',
+      } as any,
+    }),
+  },
+  toggleLeft: {
+    borderTopLeftRadius: BorderRadius.full,
+    borderBottomLeftRadius: BorderRadius.full,
+  },
+  toggleRight: {
+    borderTopRightRadius: BorderRadius.full,
+    borderBottomRightRadius: BorderRadius.full,
+  },
+  toggleText: {
+    fontFamily: Fonts.family,
+    fontWeight: Fonts.weights.semibold,
+    fontSize: Fonts.sizes.base,
+  },
   grid: {
     gap: Spacing.lg,
     alignItems: 'stretch',
@@ -132,6 +210,22 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     letterSpacing: 0.5,
   },
+  discountBadge: {
+    position: 'absolute',
+    top: 16,
+    left: 16,
+    backgroundColor: '#E53935',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: BorderRadius.full,
+    zIndex: 2,
+  },
+  discountText: {
+    fontFamily: Fonts.family,
+    fontWeight: Fonts.weights.bold,
+    fontSize: 11,
+    color: '#FFFFFF',
+  },
   packageName: {
     fontFamily: Fonts.family,
     fontWeight: Fonts.weights.bold,
@@ -140,9 +234,19 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.md,
   },
   priceContainer: {
+    alignItems: 'center',
+    marginBottom: Spacing.lg,
+  },
+  originalPrice: {
+    fontFamily: Fonts.family,
+    fontWeight: Fonts.weights.regular,
+    fontSize: Fonts.sizes.base,
+    textDecorationLine: 'line-through',
+    marginBottom: 4,
+  },
+  priceRow: {
     flexDirection: 'row',
     alignItems: 'flex-end',
-    marginBottom: Spacing.lg,
   },
   currency: {
     fontFamily: Fonts.family,

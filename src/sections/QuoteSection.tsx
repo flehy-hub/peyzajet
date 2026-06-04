@@ -35,6 +35,7 @@ export function QuoteSection() {
   return (
     <SectionWrapper id="maliyet-hesapla" background="alt">
       <SectionTitle
+        overline="Maliyet Hesaplama"
         title="Ücretsiz Maliyet Hesaplama"
         subtitle="Bahçenizin yaklaşık maliyetini hemen öğrenin"
       />

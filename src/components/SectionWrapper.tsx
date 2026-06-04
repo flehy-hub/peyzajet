@@ -6,7 +6,7 @@ import { MaxWidth, Spacing } from '../theme';
 interface Props {
   children: React.ReactNode;
   id?: string;
-  background?: 'default' | 'alt' | 'dark';
+  background?: 'default' | 'alt' | 'dark' | 'primaryLight';
   noPadding?: boolean;
 }
 
@@ -16,6 +16,7 @@ export function SectionWrapper({ children, id, background = 'default', noPadding
   const bg =
     background === 'alt' ? colors.surfaceAlt :
     background === 'dark' ? colors.secondary :
+    background === 'primaryLight' ? colors.primaryLightBg :
     colors.background;
 
   const webProps = Platform.OS === 'web' && id ? { id, accessibilityRole: 'region' as const } : {};

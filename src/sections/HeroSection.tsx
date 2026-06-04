@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Platform, ImageBackground } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { useTheme } from '../hooks/useTheme';
 import { useResponsive } from '../hooks/useResponsive';
 import { Button } from '../components/Button';
@@ -41,7 +42,15 @@ export function HeroSection() {
         ]}
         resizeMode="cover"
       />
-      <View style={styles.overlay} />
+      <LinearGradient
+        colors={['rgba(15, 26, 20, 0.3)', 'rgba(15, 26, 20, 0.55)', 'rgba(15, 26, 20, 0.8)']}
+        locations={[0, 0.5, 1]}
+        style={StyleSheet.absoluteFillObject}
+      />
+
+      {/* Decorative elements */}
+      <View style={styles.decorTopRight} />
+      <View style={styles.decorBottomLeft} />
 
       <View style={[
         styles.content,
@@ -50,22 +59,22 @@ export function HeroSection() {
           transform: [{ translateY: visible ? 0 : 40 }],
         },
       ]}>
-        <View style={[styles.badge, { backgroundColor: 'rgba(111, 164, 58, 0.2)', borderColor: 'rgba(111, 164, 58, 0.4)' }]}>
-          <Text style={styles.badgeText}>Profesyonel Peyzaj Hizmetleri</Text>
-        </View>
+        <Text style={styles.overline}>
+          {'PROFESYONEL PEYZAJ HİZMETLERİ'}
+        </Text>
 
         <Text style={[
           styles.title,
           { fontSize: compact ? Fonts.sizes['3xl'] : Fonts.sizes.hero, lineHeight: compact ? 44 : 76 },
         ]}>
-          Hayalinizdeki Bah{'ç'}eyi{'\n'}Ger{'ç'}e{'ğ'}e D{'ö'}n{'ü'}{'ş'}t{'ü'}r{'ü'}yoruz
+          {'Hayalinizdeki Bahçeyi\nGerçeğe Dönüştürüyoruz'}
         </Text>
 
         <Text style={[
           styles.subtitle,
           { fontSize: compact ? Fonts.sizes.base : Fonts.sizes.lg, maxWidth: compact ? '100%' : 600 },
         ]}>
-          Profesyonel peyzaj tasar{'ı'}m{'ı'}, bah{'ç'}e d{'ü'}zenleme ve bak{'ı'}m hizmetleri
+          {'Profesyonel peyzaj tasarımı, bahçe düzenleme ve bakım hizmetleri'}
         </Text>
 
         <View style={[styles.buttons, { flexDirection: compact ? 'column' : 'row' }]}>
@@ -73,6 +82,7 @@ export function HeroSection() {
             title="Ücretsiz Keşif Talebi"
             variant="primary"
             size="lg"
+            icon="arrow"
             onPress={() => scrollToSection('iletisim')}
           />
           <Button
@@ -118,9 +128,26 @@ const styles = StyleSheet.create({
     height: '120%',
     top: -50,
   },
-  overlay: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(15, 26, 20, 0.65)',
+  decorTopRight: {
+    position: 'absolute',
+    top: -60,
+    right: -60,
+    width: 200,
+    height: 200,
+    borderRadius: 100,
+    backgroundColor: 'rgba(111, 164, 58, 0.06)',
+    zIndex: 0,
+  },
+  decorBottomLeft: {
+    position: 'absolute',
+    bottom: -40,
+    left: -40,
+    width: 160,
+    height: 160,
+    borderRadius: 80,
+    borderWidth: 2,
+    borderColor: 'rgba(111, 164, 58, 0.1)',
+    zIndex: 0,
   },
   content: {
     maxWidth: MaxWidth.content,
@@ -135,19 +162,13 @@ const styles = StyleSheet.create({
       } as any,
     }),
   },
-  badge: {
-    paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.sm,
-    borderRadius: 50,
-    borderWidth: 1,
-    marginBottom: Spacing.lg,
-  },
-  badgeText: {
+  overline: {
     fontFamily: Fonts.family,
-    fontWeight: Fonts.weights.medium,
+    fontWeight: Fonts.weights.semibold,
     fontSize: Fonts.sizes.sm,
     color: '#6FA43A',
-    letterSpacing: 1,
+    letterSpacing: 3,
+    marginBottom: Spacing.lg,
   },
   title: {
     fontFamily: Fonts.family,
