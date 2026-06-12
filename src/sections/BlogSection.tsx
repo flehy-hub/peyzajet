@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, Image, StyleSheet, Platform, Pressable } from 'react-native';
+import { View, Text, Image, StyleSheet, Platform, Pressable, ScrollView } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { SectionWrapper } from '../components/SectionWrapper';
 import { SectionTitle } from '../components/SectionTitle';
 import { useTheme } from '../hooks/useTheme';
@@ -17,16 +18,28 @@ export function BlogSection() {
         title="Peyzaj Dünyasından"
         subtitle="Peyzaj ve bahçe bakımı hakkında faydalı bilgiler"
       />
-      <View style={[styles.grid, { flexDirection: isMobile ? 'column' : 'row' }]}>
-        {BLOG_POSTS.map((post) => (
-          <BlogCard key={post.id} post={post} />
-        ))}
-      </View>
+      {isMobile ? (
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.scrollRow}
+        >
+          {BLOG_POSTS.map((post) => (
+            <BlogCard key={post.id} post={post} mobile />
+          ))}
+        </ScrollView>
+      ) : (
+        <View style={styles.grid}>
+          {BLOG_POSTS.map((post) => (
+            <BlogCard key={post.id} post={post} />
+          ))}
+        </View>
+      )}
     </SectionWrapper>
   );
 }
 
-function BlogCard({ post }: { post: typeof BLOG_POSTS[0] }) {
+function BlogCard({ post, mobile }: { post: typeof BLOG_POSTS[0]; mobile?: boolean }) {
   const { colors } = useTheme();
   const [hovered, setHovered] = useState(false);
   const webHover = Platform.OS === 'web' ? {
@@ -39,6 +52,7 @@ function BlogCard({ post }: { post: typeof BLOG_POSTS[0] }) {
       {...webHover}
       style={[
         styles.card,
+        mobile && styles.cardMobile,
         {
           backgroundColor: colors.surface,
           transform: [{ translateY: hovered ? -6 : 0 }],
@@ -66,7 +80,7 @@ function BlogCard({ post }: { post: typeof BLOG_POSTS[0] }) {
 
         <Pressable style={styles.readMore}>
           <Text style={[styles.readMoreText, { color: colors.primary }]}>
-            Devamını Oku {'→'}
+            Devamını Oku <MaterialCommunityIcons name="arrow-right" size={14} color={colors.primary} />
           </Text>
         </Pressable>
       </View>
@@ -76,7 +90,16 @@ function BlogCard({ post }: { post: typeof BLOG_POSTS[0] }) {
 
 const styles = StyleSheet.create({
   grid: {
+    flexDirection: 'row',
     gap: Spacing.lg,
+  },
+  scrollRow: {
+    gap: Spacing.md,
+    paddingVertical: Spacing.xs,
+  },
+  cardMobile: {
+    width: 260,
+    flex: undefined,
   },
   card: {
     flex: 1,
@@ -128,7 +151,7 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.sm,
   },
   title: {
-    fontFamily: Fonts.family,
+    fontFamily: Fonts.headingFamily,
     fontWeight: Fonts.weights.bold,
     fontSize: Fonts.sizes.md,
     marginBottom: Spacing.sm,

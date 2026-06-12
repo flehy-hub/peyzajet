@@ -1,17 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import { Pressable, Text, StyleSheet, Platform } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { Pressable, StyleSheet, Platform } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTheme } from '../hooks/useTheme';
 
 export function ScrollToTopFAB() {
   const { colors } = useTheme();
   const [visible, setVisible] = useState(false);
   const [hovered, setHovered] = useState(false);
+  const scrollerRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     if (Platform.OS !== 'web') return;
-    const handleScroll = () => setVisible(window.scrollY > 400);
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    const handleScroll = (e: Event) => {
+      const target = e.target as HTMLElement | Document;
+      const y = window.scrollY || (target instanceof HTMLElement ? target.scrollTop : 0);
+      if (target instanceof HTMLElement) scrollerRef.current = target;
+      setVisible(y > 400);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true, capture: true });
+    return () => window.removeEventListener('scroll', handleScroll, { capture: true } as any);
   }, []);
 
   if (!visible) return null;
@@ -23,8 +30,13 @@ export function ScrollToTopFAB() {
 
   return (
     <Pressable
+      accessibilityRole="button"
+      accessibilityLabel="Sayfanın başına dön"
       onPress={() => {
-        if (Platform.OS === 'web') window.scrollTo({ top: 0, behavior: 'smooth' });
+        if (Platform.OS === 'web') {
+          if (scrollerRef.current) scrollerRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+          else window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
       }}
       {...webHover}
       style={[
@@ -36,7 +48,7 @@ export function ScrollToTopFAB() {
         },
       ]}
     >
-      <Text style={styles.icon}>{'↑'}</Text>
+      <MaterialCommunityIcons name="chevron-up" size={24} color="#FFFFFF" />
     </Pressable>
   );
 }

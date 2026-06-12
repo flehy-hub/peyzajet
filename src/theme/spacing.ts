@@ -20,7 +20,7 @@ export const BorderRadius = {
 };
 
 export const MaxWidth = {
-  content: 1200,
+  content: 1140,
   narrow: 800,
   wide: 1400,
 };

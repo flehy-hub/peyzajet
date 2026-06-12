@@ -26,20 +26,21 @@ export default function Root({ children }: PropsWithChildren) {
 
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600;700;800&family=Onest:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
 
         <ScrollViewStyleReset />
 
         <style dangerouslySetInnerHTML={{ __html: `
           * { box-sizing: border-box; margin: 0; padding: 0; }
           html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
-          body { overflow-x: hidden; font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif; }
+          body { overflow-x: hidden; font-family: 'Onest', 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif; color: #565753; font-size: 16px; line-height: 26px; font-optical-sizing: auto; }
+          h1, h2, h3, h4, h5, h6 { font-family: 'Inter Tight', 'Inter', sans-serif; }
           #root { display: flex; flex-direction: column; min-height: 100vh; }
           ::-webkit-scrollbar { width: 8px; }
-          ::-webkit-scrollbar-track { background: #f1f1f1; }
-          ::-webkit-scrollbar-thumb { background: #6FA43A; border-radius: 4px; }
-          ::-webkit-scrollbar-thumb:hover { background: #5A8A2E; }
-          ::selection { background: rgba(111, 164, 58, 0.3); }
+          ::-webkit-scrollbar-track { background: #f4f5ec; }
+          ::-webkit-scrollbar-thumb { background: #99a537; border-radius: 4px; }
+          ::-webkit-scrollbar-thumb:hover { background: #7d8a2a; }
+          ::selection { background: rgba(153, 165, 55, 0.3); }
         `}} />
       </head>
       <body>{children}</body>

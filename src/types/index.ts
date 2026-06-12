@@ -1,3 +1,5 @@
+import type { ImageSourcePropType } from 'react-native';
+
 export interface Service {
   id: string;
   title: string;
@@ -14,26 +16,27 @@ export interface Project {
   type: 'villa' | 'site' | 'ticari' | 'hobi';
   area: number;
   duration: string;
-  image: string;
+  image: ImageSourcePropType;
   category: string;
 }
 
 export interface BeforeAfter {
   id: string;
   title: string;
-  beforeImage: string;
-  afterImage: string;
+  category: string;
+  area: string;
+  location: string;
+  beforeImage: ImageSourcePropType;
+  afterImage: ImageSourcePropType;
 }
 
 export interface Package {
   id: string;
   name: string;
-  price: string;
-  originalPrice?: string;
-  discount?: string;
-  commercialPrice?: string;
-  commercialOriginalPrice?: string;
-  period: string;
+  priceMin: string;
+  priceMax: string;
+  area: string;
+  frequency: string;
   features: string[];
   popular?: boolean;
   color: string;
@@ -71,6 +74,36 @@ export interface QuoteFormData {
   plantDensity: string;
   hasLighting: boolean;
   hasIrrigation: boolean;
+}
+
+/* ── Maliyet Hesaplama v2 ── */
+export interface CostFormData {
+  projectType: string;
+  area: number;
+  includeDesign: boolean;
+  applications: string[];
+  plantLevel: string;
+  materialQuality: string;
+  terrain: string;
+}
+
+export interface CostBreakdown {
+  soilPrep: { min: number; max: number };
+  designFee: { min: number; max: number };
+  applicationCosts: Record<string, { min: number; max: number }>;
+  materialTotal: { min: number; max: number };
+  overhead: { min: number; max: number };
+  subtotal: { min: number; max: number };
+  vat: { min: number; max: number };
+  grandTotal: { min: number; max: number };
+}
+
+export interface ProjectMeta {
+  estimatedDuration: string;
+  teamSize: string;
+  irrigationZones: string;
+  yearlyMaintenance: string;
+  difficulty: string;
 }
 
 export interface ContactFormData {

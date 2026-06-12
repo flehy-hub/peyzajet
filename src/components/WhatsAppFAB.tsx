@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Pressable, Text, StyleSheet, Platform, Linking } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { CONTACT_INFO } from '../constants/data';
 
 export function WhatsAppFAB() {
@@ -11,14 +12,16 @@ export function WhatsAppFAB() {
 
   return (
     <Pressable
-      onPress={() => Linking.openURL(`https://wa.me/${CONTACT_INFO.whatsapp}`)}
+      accessibilityRole="button"
+      accessibilityLabel="WhatsApp ile iletişime geç"
+      onPress={() => Linking.openURL(`https://wa.me/${CONTACT_INFO.whatsapp.replace(/\D/g, '')}`)}
       {...webHover}
       style={[
         styles.fab,
         { transform: [{ scale: hovered ? 1.1 : 1 }] },
       ]}
     >
-      <Text style={styles.icon}>💬</Text>
+      <MaterialCommunityIcons name="whatsapp" size={28} color="#FFFFFF" />
     </Pressable>
   );
 }

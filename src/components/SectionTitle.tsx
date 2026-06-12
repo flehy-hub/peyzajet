@@ -24,7 +24,7 @@ export function SectionTitle({ title, subtitle, overline, light, align = 'center
       {overline && (
         <Text style={[
           styles.overline,
-          { color: light ? 'rgba(111, 164, 58, 0.9)' : colors.primary, textAlign: isCenter ? 'center' : 'left' },
+          { color: light ? 'rgba(153, 165, 55, 0.9)' : colors.primary, textAlign: isCenter ? 'center' : 'left' },
         ]}>
           {overline.toUpperCase()}
         </Text>
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.sm,
   },
   title: {
-    fontFamily: Fonts.family,
+    fontFamily: Fonts.headingFamily,
     fontWeight: Fonts.weights.bold,
   },
   divider: {

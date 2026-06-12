@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
     opacity: 0.4,
   },
   name: {
-    fontFamily: Fonts.family,
+    fontFamily: Fonts.headingFamily,
     fontWeight: Fonts.weights.bold,
     fontSize: Fonts.sizes.md,
     marginBottom: Spacing.xs,

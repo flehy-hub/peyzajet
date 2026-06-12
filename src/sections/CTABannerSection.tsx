@@ -11,7 +11,7 @@ export function CTABannerSection() {
 
   return (
     <LinearGradient
-      colors={['#1F3A2E', '#2D5A3E', '#1F3A2E']}
+      colors={['#223740', '#2d4a52', '#223740']}
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 1 }}
       style={styles.container}
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     width: 120,
     height: 120,
     borderRadius: 60,
-    backgroundColor: 'rgba(111, 164, 58, 0.08)',
+    backgroundColor: 'rgba(153, 165, 55, 0.08)',
   },
   decorRight: {
     position: 'absolute',
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     width: 160,
     height: 160,
     borderRadius: 80,
-    backgroundColor: 'rgba(111, 164, 58, 0.06)',
+    backgroundColor: 'rgba(153, 165, 55, 0.06)',
   },
   inner: {
     maxWidth: MaxWidth.content,
@@ -92,12 +92,12 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.family,
     fontWeight: Fonts.weights.semibold,
     fontSize: Fonts.sizes.sm,
-    color: '#6FA43A',
+    color: '#99a537',
     letterSpacing: 2,
     marginBottom: Spacing.sm,
   },
   headline: {
-    fontFamily: Fonts.family,
+    fontFamily: Fonts.headingFamily,
     fontWeight: Fonts.weights.bold,
     color: '#FFFFFF',
     marginBottom: Spacing.md,
@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.family,
     fontWeight: Fonts.weights.extrabold,
     fontSize: Fonts.sizes['2xl'],
-    color: '#6FA43A',
+    color: '#99a537',
     ...Platform.select({ web: { cursor: 'pointer' } as any }),
   },
 });

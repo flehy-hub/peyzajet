@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Pressable, Text, View, StyleSheet, Platform } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTheme } from '../hooks/useTheme';
 import { Fonts, BorderRadius, Spacing } from '../theme';
 
@@ -18,7 +19,7 @@ export function Button({ title, onPress, variant = 'primary', size = 'md', icon,
 
   const bgColor =
     variant === 'primary' ? (hovered ? colors.primaryDark : colors.primary) :
-    variant === 'secondary' ? (hovered ? '#2A4D3A' : colors.secondary) :
+    variant === 'secondary' ? (hovered ? '#1a2c32' : colors.secondary) :
     variant === 'white' ? (hovered ? '#F0F0EB' : '#FFFFFF') :
     'transparent';
 
@@ -38,7 +39,8 @@ export function Button({ title, onPress, variant = 'primary', size = 'md', icon,
     onMouseLeave: () => setHovered(false),
   } : {};
 
-  const displayText = icon === 'arrow' ? `${title} →` : icon === 'phone' ? `📞 ${title}` : title;
+  const iconName = icon === 'arrow' ? 'arrow-right' : icon === 'phone' ? 'phone' : null;
+  const displayText = title;
 
   return (
     <Pressable
@@ -56,9 +58,13 @@ export function Button({ title, onPress, variant = 'primary', size = 'md', icon,
         },
       ]}
     >
-      <Text style={[styles.text, { color: textColor, fontSize }]}>
-        {displayText}
-      </Text>
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+        {iconName === 'phone' && <MaterialCommunityIcons name="phone" size={fontSize} color={textColor} />}
+        <Text style={[styles.text, { color: textColor, fontSize }]}>
+          {displayText}
+        </Text>
+        {iconName === 'arrow-right' && <MaterialCommunityIcons name="arrow-right" size={fontSize} color={textColor} />}
+      </View>
     </Pressable>
   );
 }

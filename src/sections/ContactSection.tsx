@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, Platform, Pressable, Linking } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { SectionWrapper } from '../components/SectionWrapper';
 import { SectionTitle } from '../components/SectionTitle';
 import { Button } from '../components/Button';
@@ -26,6 +27,35 @@ export function ContactSection() {
     setForm((prev) => ({ ...prev, [key]: value }));
   };
 
+  const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
+
+  const handleSubmit = async () => {
+    if (!form.name.trim() || !form.phone.trim()) {
+      setStatus('error');
+      return;
+    }
+    setStatus('sending');
+    try {
+      const res = await fetch(`https://formsubmit.co/ajax/${CONTACT_INFO.email}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          _subject: 'Peyzajet - Yeni İletişim Formu',
+          'Ad Soyad': form.name,
+          Telefon: form.phone,
+          'E-posta': form.email,
+          'Hizmet Türü': form.serviceType || 'Belirtilmedi',
+          Mesaj: form.message,
+        }),
+      });
+      if (!res.ok) throw new Error('send failed');
+      setStatus('sent');
+      setForm({ name: '', phone: '', email: '', serviceType: '', message: '' });
+    } catch {
+      setStatus('error');
+    }
+  };
+
   return (
     <SectionWrapper id="iletisim">
       <SectionTitle
@@ -43,6 +73,7 @@ export function ContactSection() {
             <View style={styles.inputGroup}>
               <Text style={[styles.inputLabel, { color: colors.text }]}>Ad Soyad</Text>
               <TextInput
+                accessibilityLabel="Ad Soyad"
                 value={form.name}
                 onChangeText={(v) => update('name', v)}
                 placeholder="Adınız Soyadınız"
@@ -53,6 +84,7 @@ export function ContactSection() {
             <View style={styles.inputGroup}>
               <Text style={[styles.inputLabel, { color: colors.text }]}>Telefon</Text>
               <TextInput
+                accessibilityLabel="Telefon"
                 value={form.phone}
                 onChangeText={(v) => update('phone', v)}
                 placeholder="0 (5XX) XXX XX XX"
@@ -67,6 +99,7 @@ export function ContactSection() {
             <View style={styles.inputGroup}>
               <Text style={[styles.inputLabel, { color: colors.text }]}>E-posta</Text>
               <TextInput
+                accessibilityLabel="E-posta"
                 value={form.email}
                 onChangeText={(v) => update('email', v)}
                 placeholder="ornek@email.com"
@@ -119,7 +152,22 @@ export function ContactSection() {
             />
           </View>
 
-          <Button title="Mesaj Gönder" variant="primary" size="lg" />
+          <Button
+            title={status === 'sending' ? 'Gönderiliyor...' : 'Mesaj Gönder'}
+            variant="primary"
+            size="lg"
+            onPress={status === 'sending' ? undefined : handleSubmit}
+          />
+          {status === 'sent' && (
+            <Text style={[styles.statusText, { color: colors.primary }]}>
+              Mesajınız alındı — en kısa sürede size dönüş yapacağız.
+            </Text>
+          )}
+          {status === 'error' && (
+            <Text style={[styles.statusText, { color: '#C0392B' }]}>
+              Gönderilemedi. Lütfen ad ve telefon alanlarını doldurun veya WhatsApp'tan ulaşın.
+            </Text>
+          )}
         </View>
 
         {/* Info Side */}
@@ -127,14 +175,14 @@ export function ContactSection() {
           <View style={[styles.infoCard, { backgroundColor: colors.secondary }]}>
             <Text style={styles.infoTitle}>İletişim Bilgileri</Text>
 
-            <InfoRow icon="📍" label="Adres" value={CONTACT_INFO.address} />
-            <InfoRow icon="📞" label="Telefon" value={CONTACT_INFO.phone} />
-            <InfoRow icon="✉" label="E-posta" value={CONTACT_INFO.email} />
-            <InfoRow icon="⏰" label="Çalışma Saatleri" value={CONTACT_INFO.workingHours} />
+            <InfoRow icon="map-marker-outline" label="Adres" value={CONTACT_INFO.address} />
+            <InfoRow icon="phone-outline" label="Telefon" value={CONTACT_INFO.phone} />
+            <InfoRow icon="email-outline" label="E-posta" value={CONTACT_INFO.email} />
+            <InfoRow icon="clock-outline" label="Çalışma Saatleri" value={CONTACT_INFO.workingHours} />
 
             <View style={styles.actionButtons}>
               <Pressable
-                onPress={() => Linking.openURL(`https://wa.me/${CONTACT_INFO.whatsapp}`)}
+                onPress={() => Linking.openURL(`https://wa.me/${CONTACT_INFO.whatsapp.replace(/\D/g, '')}`)}
                 style={[styles.actionBtn, { backgroundColor: '#25D366' }]}
               >
                 <Text style={styles.actionBtnText}>WhatsApp ile Yaz</Text>
@@ -142,31 +190,27 @@ export function ContactSection() {
 
               <Pressable
                 onPress={() => Linking.openURL(`tel:${CONTACT_INFO.phone}`)}
-                style={[styles.actionBtn, { backgroundColor: '#6FA43A' }]}
+                style={[styles.actionBtn, { backgroundColor: '#99a537' }]}
               >
                 <Text style={styles.actionBtnText}>Hemen Ara</Text>
               </Pressable>
             </View>
           </View>
 
-          {/* Map placeholder */}
-          <View style={[styles.mapContainer, { backgroundColor: colors.surfaceAlt }]}>
-            {Platform.OS === 'web' ? (
+          {/* Map */}
+          {Platform.OS === 'web' ? (
+            <View style={[styles.mapContainer, { backgroundColor: colors.surfaceAlt }]}>
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d48168.29684948!2d29.0!3d41.05!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDHCsDAzJzAwLjAiTiAyOcKwMDAnMDAuMCJF!5e0!3m2!1str!2str!4v1600000000000!5m2!1str!2str"
+                src="https://maps.google.com/maps?q=%C4%B0lker%20Mahallesi%2C%20Dikmen%2C%20%C3%87ankaya%2C%20Ankara&t=&z=14&ie=UTF8&iwloc=&output=embed"
                 width="100%"
                 height="100%"
-                style={{ border: 0, borderRadius: 16 } as any}
+                style={{ border: 0, borderRadius: 16, display: 'block' } as any}
                 allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
               />
-            ) : (
-              <View style={styles.mapPlaceholder}>
-                <Text style={{ color: colors.textMuted, fontSize: 14 }}>Harita</Text>
-              </View>
-            )}
-          </View>
+            </View>
+          ) : null}
         </View>
       </View>
     </SectionWrapper>
@@ -176,7 +220,7 @@ export function ContactSection() {
 function InfoRow({ icon, label, value }: { icon: string; label: string; value: string }) {
   return (
     <View style={styles.infoRow}>
-      <Text style={{ fontSize: 20 }}>{icon}</Text>
+      <MaterialCommunityIcons name={icon as any} size={22} color="#99a537" />
       <View style={{ flex: 1 }}>
         <Text style={styles.infoLabel}>{label}</Text>
         <Text style={styles.infoValue}>{value}</Text>
@@ -192,7 +236,7 @@ const styles = StyleSheet.create({
   },
   formContainer: {
     flex: 1.5,
-    padding: Spacing.xl,
+    padding: Spacing.lg,
     borderRadius: BorderRadius.xl,
   },
   row: {
@@ -202,6 +246,12 @@ const styles = StyleSheet.create({
   inputGroup: {
     flex: 1,
     marginBottom: Spacing.sm,
+  },
+  statusText: {
+    fontFamily: Fonts.family,
+    fontSize: Fonts.sizes.sm,
+    marginTop: Spacing.sm,
+    textAlign: 'center',
   },
   inputLabel: {
     fontFamily: Fonts.family,
@@ -218,11 +268,11 @@ const styles = StyleSheet.create({
     fontSize: Fonts.sizes.sm,
     justifyContent: 'center',
     ...Platform.select({
-      web: { outlineColor: '#6FA43A', transitionDuration: '200ms', transitionProperty: 'border-color' } as any,
+      web: { outlineColor: '#99a537', transitionDuration: '200ms', transitionProperty: 'border-color' } as any,
     }),
   },
   textarea: {
-    minHeight: 120,
+    minHeight: 80,
     borderRadius: BorderRadius.md,
     borderWidth: 1,
     paddingHorizontal: Spacing.md,
@@ -230,9 +280,9 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.family,
     fontSize: Fonts.sizes.sm,
     textAlignVertical: 'top',
-    marginBottom: Spacing.md,
+    marginBottom: Spacing.sm,
     ...Platform.select({
-      web: { outlineColor: '#6FA43A', resize: 'vertical' } as any,
+      web: { outlineColor: '#99a537', resize: 'vertical' } as any,
     }),
   },
   infoSide: {
@@ -244,7 +294,7 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.xl,
   },
   infoTitle: {
-    fontFamily: Fonts.family,
+    fontFamily: Fonts.headingFamily,
     fontWeight: Fonts.weights.bold,
     fontSize: Fonts.sizes.xl,
     color: '#FFFFFF',
@@ -290,8 +340,10 @@ const styles = StyleSheet.create({
   },
   mapContainer: {
     height: 250,
+    minHeight: 250,
     borderRadius: BorderRadius.xl,
     overflow: 'hidden',
+    marginBottom: Spacing.md,
   },
   mapPlaceholder: {
     flex: 1,

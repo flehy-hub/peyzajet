@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, Image, StyleSheet, Platform, Pressable } from 'react-native';
+import { View, Text, Image, StyleSheet, Platform, Pressable, ScrollView } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { SectionWrapper } from '../components/SectionWrapper';
 import { SectionTitle } from '../components/SectionTitle';
 import { useTheme } from '../hooks/useTheme';
@@ -49,11 +50,23 @@ export function ProjectsSection() {
         ))}
       </View>
 
-      <View style={styles.grid}>
-        {filtered.map((project) => (
-          <ProjectCard key={project.id} project={project} cols={cols} />
-        ))}
-      </View>
+      {isMobile ? (
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.scrollRow}
+        >
+          {filtered.map((project) => (
+            <ProjectCard key={project.id} project={project} cols={cols} />
+          ))}
+        </ScrollView>
+      ) : (
+        <View style={styles.grid}>
+          {filtered.map((project) => (
+            <ProjectCard key={project.id} project={project} cols={cols} />
+          ))}
+        </View>
+      )}
     </SectionWrapper>
   );
 }
@@ -66,7 +79,7 @@ function ProjectCard({ project, cols }: { project: typeof PROJECTS[0]; cols: num
     onMouseLeave: () => setHovered(false),
   } : {};
 
-  const widthPercent = cols === 1 ? '100%' : cols === 2 ? '48.5%' : '32%';
+  const widthPercent = cols === 1 ? 280 : cols === 2 ? '48.5%' : '32%';
 
   return (
     <View
@@ -88,7 +101,7 @@ function ProjectCard({ project, cols }: { project: typeof PROJECTS[0]; cols: num
       ]}
     >
       <View style={styles.imageContainer}>
-        <Image source={{ uri: project.image }} style={styles.image} resizeMode="cover" />
+        <Image source={project.image} style={styles.image} resizeMode="cover" />
         <View style={[styles.badge, { backgroundColor: colors.primary }]}>
           <Text style={styles.badgeText}>{project.category}</Text>
         </View>
@@ -96,9 +109,18 @@ function ProjectCard({ project, cols }: { project: typeof PROJECTS[0]; cols: num
       <View style={styles.cardBody}>
         <Text style={[styles.cardTitle, { color: colors.text }]}>{project.title}</Text>
         <View style={styles.meta}>
-          <Text style={[styles.metaText, { color: colors.textMuted }]}>📍 {project.location}</Text>
-          <Text style={[styles.metaText, { color: colors.textMuted }]}>📐 {project.area} m²</Text>
-          <Text style={[styles.metaText, { color: colors.textMuted }]}>⏱ {project.duration}</Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+            <MaterialCommunityIcons name="map-marker-outline" size={13} color={colors.textMuted} />
+            <Text style={[styles.metaText, { color: colors.textMuted }]}>{project.location}</Text>
+          </View>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+            <MaterialCommunityIcons name="ruler-square" size={13} color={colors.textMuted} />
+            <Text style={[styles.metaText, { color: colors.textMuted }]}>{project.area} m²</Text>
+          </View>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+            <MaterialCommunityIcons name="clock-outline" size={13} color={colors.textMuted} />
+            <Text style={[styles.metaText, { color: colors.textMuted }]}>{project.duration}</Text>
+          </View>
         </View>
       </View>
     </View>
@@ -130,6 +152,10 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     justifyContent: 'space-between',
     gap: Spacing.md,
+  },
+  scrollRow: {
+    gap: Spacing.md,
+    paddingVertical: Spacing.xs,
   },
   card: {
     borderRadius: BorderRadius.lg,
@@ -170,7 +196,7 @@ const styles = StyleSheet.create({
     padding: Spacing.md,
   },
   cardTitle: {
-    fontFamily: Fonts.family,
+    fontFamily: Fonts.headingFamily,
     fontWeight: Fonts.weights.bold,
     fontSize: Fonts.sizes.base,
     marginBottom: Spacing.sm,

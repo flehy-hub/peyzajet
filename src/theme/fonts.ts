@@ -1,10 +1,12 @@
 import { Platform } from 'react-native';
 
-const webFontFamily = '"Inter", "Segoe UI", system-ui, -apple-system, sans-serif';
+const webHeadingFamily = '"Inter Tight", "Inter", sans-serif';
+const webTextFamily = '"Onest", "Inter", sans-serif';
 const nativeFontFamily = 'System';
 
 export const Fonts = {
-  family: Platform.OS === 'web' ? webFontFamily : nativeFontFamily,
+  family: Platform.OS === 'web' ? webTextFamily : nativeFontFamily,
+  headingFamily: Platform.OS === 'web' ? webHeadingFamily : nativeFontFamily,
   sizes: {
     xs: 12,
     sm: 14,

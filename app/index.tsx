@@ -5,6 +5,7 @@ import { Header } from '../src/components/Header';
 import { Footer } from '../src/components/Footer';
 import { WhatsAppFAB } from '../src/components/WhatsAppFAB';
 import { ScrollToTopFAB } from '../src/components/ScrollToTopFAB';
+import { StickyQuoteBar } from '../src/components/StickyQuoteBar';
 import {
   HeroSection,
   ServicesSection,
@@ -36,23 +37,25 @@ export default function HomeScreen() {
       >
         <HeroSection />
         <ServicesSection />
-        <CapabilitiesSection />
-        <ProcessSection />
-        <CTABannerSection />
+        {/* Capabilities içerik olarak Services ile örtüşüyor — gerekirse geri açılabilir */}
+        {/* <CapabilitiesSection /> */}
         <ProjectsSection />
         <BeforeAfterSection />
-        <FounderQuoteSection />
+        <QuoteSection />
+        <ProcessSection />
         <PackagesSection />
         <StatsSection />
         <TestimonialsSection />
-        <TeamSection />
-        <QuoteSection />
+        <FounderQuoteSection />
+        {/* <TeamSection /> */}
+        <CTABannerSection />
         <BlogSection />
         <ContactSection />
         <Footer />
       </ScrollView>
       <WhatsAppFAB />
       <ScrollToTopFAB />
+      <StickyQuoteBar />
     </>
   );
 }
