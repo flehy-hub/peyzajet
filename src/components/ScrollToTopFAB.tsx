@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Pressable, StyleSheet, Platform } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTheme } from '../hooks/useTheme';
+import { getPageScrollY, getPageScroller } from '../utils/pageScroll';
 
 export function ScrollToTopFAB() {
   const { colors } = useTheme();
@@ -12,9 +13,10 @@ export function ScrollToTopFAB() {
   useEffect(() => {
     if (Platform.OS !== 'web') return;
     const handleScroll = (e: Event) => {
-      const target = e.target as HTMLElement | Document;
-      const y = window.scrollY || (target instanceof HTMLElement ? target.scrollTop : 0);
-      if (target instanceof HTMLElement) scrollerRef.current = target;
+      const y = getPageScrollY(e);
+      if (y === null) return; // yatay carousel vb. — yok say
+      const scroller = getPageScroller(e);
+      if (scroller) scrollerRef.current = scroller;
       setVisible(y > 400);
     };
     window.addEventListener('scroll', handleScroll, { passive: true, capture: true });

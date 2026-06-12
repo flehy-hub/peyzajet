@@ -6,6 +6,7 @@ import { useResponsive } from '../hooks/useResponsive';
 import { Logo } from './Logo';
 import { Fonts, Spacing, MaxWidth, BorderRadius } from '../theme';
 import { NAV_LINKS } from '../constants/data';
+import { getPageScrollY } from '../utils/pageScroll';
 
 export function Header() {
   const { colors, mode, toggleTheme } = useTheme();
@@ -18,8 +19,8 @@ export function Header() {
     // Sayfa RN ScrollView içinde kaydığı için window.scrollY değişmez;
     // capture ile iç container'ların scroll'unu da yakala.
     const handleScroll = (e: Event) => {
-      const target = e.target as HTMLElement | Document;
-      const y = window.scrollY || (target instanceof HTMLElement ? target.scrollTop : 0);
+      const y = getPageScrollY(e);
+      if (y === null) return; // yatay carousel vb. — yok say
       setScrolled(y > 50);
     };
     window.addEventListener('scroll', handleScroll, { passive: true, capture: true });
