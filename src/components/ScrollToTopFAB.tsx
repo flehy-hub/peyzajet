@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Pressable, StyleSheet, Platform } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTheme } from '../hooks/useTheme';
-import { getPageScrollY, getPageScroller } from '../utils/pageScroll';
+import { getPageScrollY, getPageScroller, findPageScroller, smoothScrollTo } from '../utils/pageScroll';
 
 export function ScrollToTopFAB() {
   const { colors } = useTheme();
@@ -36,8 +36,9 @@ export function ScrollToTopFAB() {
       accessibilityLabel="Sayfanın başına dön"
       onPress={() => {
         if (Platform.OS === 'web') {
-          if (scrollerRef.current) scrollerRef.current.scrollTo({ top: 0, behavior: 'smooth' });
-          else window.scrollTo({ top: 0, behavior: 'smooth' });
+          const scroller = scrollerRef.current ?? findPageScroller();
+          if (scroller) smoothScrollTo(scroller, 0);
+          else window.scrollTo(0, 0);
         }
       }}
       {...webHover}
