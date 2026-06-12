@@ -6,6 +6,7 @@ import { useResponsive } from '../hooks/useResponsive';
 import { Logo } from './Logo';
 import { Fonts, Spacing, MaxWidth, BorderRadius } from '../theme';
 import { NAV_LINKS, CONTACT_INFO } from '../constants/data';
+import { scrollToId } from '../utils/pageScroll';
 
 const SOCIAL_LINKS = [
   { icon: 'facebook' as const, url: '#' },
@@ -44,10 +45,7 @@ export function Footer() {
   const { isMobile } = useResponsive();
 
   const scrollToSection = (href: string) => {
-    if (Platform.OS === 'web') {
-      const id = href.replace('#', '');
-      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
-    }
+    if (Platform.OS === 'web') scrollToId(href.replace('#', ''));
   };
 
   return (

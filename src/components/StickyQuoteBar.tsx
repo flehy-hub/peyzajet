@@ -3,7 +3,7 @@ import { Pressable, Text, StyleSheet, Platform } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTheme } from '../hooks/useTheme';
 import { useResponsive } from '../hooks/useResponsive';
-import { getPageScrollY } from '../utils/pageScroll';
+import { getPageScrollY, scrollToId } from '../utils/pageScroll';
 
 export function StickyQuoteBar() {
   const { colors } = useTheme();
@@ -35,7 +35,7 @@ export function StickyQuoteBar() {
       accessibilityLabel="Maliyet hesaplayıcıya git"
       onPress={() => {
         if (Platform.OS === 'web') {
-          document.getElementById('maliyet-hesapla')?.scrollIntoView({ behavior: 'smooth' });
+          scrollToId('maliyet-hesapla');
         }
       }}
       style={[styles.bar, { backgroundColor: colors.primary }]}

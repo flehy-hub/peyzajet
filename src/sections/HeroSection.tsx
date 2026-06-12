@@ -5,6 +5,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useTheme } from '../hooks/useTheme';
 import { useResponsive } from '../hooks/useResponsive';
 import { Fonts, Spacing, MaxWidth, BorderRadius } from '../theme';
+import { scrollToId } from '../utils/pageScroll';
 
 const DARK_BG = '#223740';
 const OLIVE = '#99a537';
@@ -21,9 +22,7 @@ export function HeroSection() {
   const compact = isMobile || isTablet;
 
   const scrollToSection = (id: string) => {
-    if (Platform.OS === 'web') {
-      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
-    }
+    if (Platform.OS === 'web') scrollToId(id);
   };
 
   return (

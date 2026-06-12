@@ -6,7 +6,7 @@ import { useResponsive } from '../hooks/useResponsive';
 import { Logo } from './Logo';
 import { Fonts, Spacing, MaxWidth, BorderRadius } from '../theme';
 import { NAV_LINKS } from '../constants/data';
-import { getPageScrollY } from '../utils/pageScroll';
+import { getPageScrollY, scrollToId } from '../utils/pageScroll';
 
 export function Header() {
   const { colors, mode, toggleTheme } = useTheme();
@@ -29,9 +29,7 @@ export function Header() {
 
   const scrollToSection = (href: string) => {
     if (Platform.OS === 'web') {
-      const id = href.replace('#', '');
-      const el = document.getElementById(id);
-      if (el) el.scrollIntoView({ behavior: 'smooth' });
+      scrollToId(href.replace('#', ''));
     }
     setMenuOpen(false);
   };

@@ -8,6 +8,7 @@ import { PROJECT_TYPES, APPLICATIONS, PLANT_LEVELS, MATERIAL_QUALITIES, TERRAIN_
 import { Fonts, Spacing, BorderRadius } from '../theme';
 import type { CostFormData } from '../types';
 import { CONTACT_INFO } from '../constants/data';
+import { scrollToId } from '../utils/pageScroll';
 
 type IconName = React.ComponentProps<typeof MaterialCommunityIcons>['name'];
 
@@ -562,7 +563,7 @@ function ResultCard({ breakdown, meta, form }: { breakdown: any; meta: any; form
         <Pressable
           onPress={() => {
             if (Platform.OS === 'web') {
-              document.getElementById('iletisim')?.scrollIntoView({ behavior: 'smooth' });
+              scrollToId('iletisim');
             }
           }}
           style={styles.kesifBtn}
