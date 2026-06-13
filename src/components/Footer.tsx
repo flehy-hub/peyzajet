@@ -1,11 +1,11 @@
 import React from 'react';
-import { View, Text, Pressable, StyleSheet, Platform, Linking, Image, TextInput } from 'react-native';
+import { View, Text, Pressable, StyleSheet, Platform, Linking } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTheme } from '../hooks/useTheme';
 import { useResponsive } from '../hooks/useResponsive';
 import { Logo } from './Logo';
 import { Fonts, Spacing, MaxWidth, BorderRadius } from '../theme';
-import { NAV_LINKS, CONTACT_INFO } from '../constants/data';
+import { NAV_LINKS } from '../constants/data';
 import { scrollToId } from '../utils/pageScroll';
 
 const SOCIAL_LINKS = [
@@ -50,64 +50,6 @@ export function Footer() {
 
   return (
     <View style={{ backgroundColor: DARK_BG }}>
-      {/* ===== TOP SECTION: Contact + Image + Newsletter ===== */}
-      <View style={[styles.topSection, { paddingHorizontal: Spacing.lg }]}>
-        <View style={[styles.topInner, { flexDirection: isMobile ? 'column' : 'row' }]}>
-          {/* Left: Contact Info */}
-          <View style={[styles.topLeft, { flex: 1 }]}>
-            <Text style={styles.overline}>İLETİŞİM</Text>
-            <Text style={styles.topHeading}>
-              {'Hayalinizdeki Bahçe İçin\nBize Ulaşın'}
-            </Text>
-            <Pressable onPress={() => Linking.openURL(`tel:${CONTACT_INFO.phone}`)}>
-              <Text style={styles.topPhone}>{CONTACT_INFO.phone}</Text>
-            </Pressable>
-            <Pressable onPress={() => Linking.openURL(`mailto:${CONTACT_INFO.email}`)}>
-              <Text style={styles.topDetail}>{CONTACT_INFO.email}</Text>
-            </Pressable>
-            <Text style={styles.topDetail}>{CONTACT_INFO.address}</Text>
-          </View>
-
-          {/* Right: Image + Newsletter */}
-          <View style={[styles.topRight, { flex: 1 }]}>
-            <Image
-              source={{ uri: 'https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=800&q=80' }}
-              style={styles.topImage}
-              resizeMode="cover"
-            />
-            {/* Newsletter strip */}
-            <View style={styles.newsletterStrip}>
-              <Text style={styles.newsletterText}>
-                Peyzaj dünyasındaki güncellemelerden haberdar olun
-              </Text>
-              {Platform.OS === 'web' ? (
-                <View style={styles.newsletterInputRow}>
-                  <TextInput
-                    placeholder="E-posta adresiniz"
-                    placeholderTextColor="rgba(255,255,255,0.6)"
-                    style={styles.newsletterInput}
-                  />
-                  <Pressable style={styles.newsletterButton}>
-                    <Text style={styles.newsletterButtonText}>Abone Ol</Text>
-                  </Pressable>
-                </View>
-              ) : (
-                <View style={styles.newsletterInputRow}>
-                  <TextInput
-                    placeholder="E-posta adresiniz"
-                    placeholderTextColor="rgba(255,255,255,0.6)"
-                    style={styles.newsletterInput}
-                  />
-                  <Pressable style={styles.newsletterButton}>
-                    <Text style={styles.newsletterButtonText}>Abone Ol</Text>
-                  </Pressable>
-                </View>
-              )}
-            </View>
-          </View>
-        </View>
-      </View>
-
       {/* ===== BOTTOM SECTION: 4 Columns ===== */}
       <View style={[styles.bottomSection, { paddingHorizontal: Spacing.lg }]}>
         <View style={[styles.bottomInner, { flexDirection: isMobile ? 'column' : 'row' }]}>
