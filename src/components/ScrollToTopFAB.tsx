@@ -59,8 +59,9 @@ export function ScrollToTopFAB() {
 const styles = StyleSheet.create({
   fab: {
     position: Platform.OS === 'web' ? ('fixed' as any) : 'absolute',
-    bottom: 30,
-    right: 100,
+    // WhatsApp butonunun (60x60, bottom 30 / right 30) hemen üzerinde, ortalanmış
+    bottom: 100,
+    right: 36,
     width: 48,
     height: 48,
     borderRadius: 24,

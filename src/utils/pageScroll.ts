@@ -24,16 +24,28 @@ export function getPageScroller(e: Event): HTMLElement | null {
  * Chrome'da sessizce işe yaramıyor; güvenilir tek yol scrollTop'a doğrudan
  * atama. Bu yüzden yumuşak kaydırmayı rAF ile kendimiz çizeriz.
  */
-export function smoothScrollTo(scroller: HTMLElement, targetTop: number, duration = 500) {
+export function smoothScrollTo(scroller: HTMLElement, targetTop: number) {
   const start = scroller.scrollTop;
   const delta = targetTop - start;
   if (Math.abs(delta) < 1) return;
+  // Mesafeye göre süre: kısa mesafede çevik, uzun mesafede izlenebilir
+  const duration = Math.min(800, 300 + Math.abs(delta) * 0.04);
   const t0 = performance.now();
+  let lastWritten = start;
   const easeInOutCubic = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
   const step = (now: number) => {
+    // Kullanıcı bu arada parmağıyla kaydırdıysa (dokunma fling'i animasyonla
+    // yarışabiliyor) inatlaşma, animasyonu bırak.
+    if (Math.abs(scroller.scrollTop - lastWritten) > 24) return;
     const t = Math.min((now - t0) / duration, 1);
-    scroller.scrollTop = start + delta * easeInOutCubic(t);
-    if (t < 1) requestAnimationFrame(step);
+    lastWritten = start + delta * easeInOutCubic(t);
+    scroller.scrollTop = lastWritten;
+    if (t < 1) {
+      requestAnimationFrame(step);
+    } else {
+      // Bitişte hedefe sabitle (URL çubuğu/viewport oynamalarına karşı)
+      scroller.scrollTop = targetTop;
+    }
   };
   requestAnimationFrame(step);
 }
