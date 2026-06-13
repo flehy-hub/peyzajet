@@ -3,9 +3,7 @@ import { ScrollView, StyleSheet } from 'react-native';
 import { useTheme } from '../src/hooks/useTheme';
 import { Header } from '../src/components/Header';
 import { Footer } from '../src/components/Footer';
-import { WhatsAppFAB } from '../src/components/WhatsAppFAB';
-import { ScrollToTopFAB } from '../src/components/ScrollToTopFAB';
-import { StickyQuoteBar } from '../src/components/StickyQuoteBar';
+import { BottomDock } from '../src/components/BottomDock';
 import {
   HeroSection,
   ServicesSection,
@@ -53,9 +51,7 @@ export default function HomeScreen() {
         <ContactSection />
         <Footer />
       </ScrollView>
-      <WhatsAppFAB />
-      <ScrollToTopFAB />
-      <StickyQuoteBar />
+      <BottomDock />
     </>
   );
 }

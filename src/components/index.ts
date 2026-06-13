@@ -4,6 +4,4 @@ export { Button } from './Button';
 export { Logo } from './Logo';
 export { Header } from './Header';
 export { Footer } from './Footer';
-export { WhatsAppFAB } from './WhatsAppFAB';
-export { ScrollToTopFAB } from './ScrollToTopFAB';
-export { StickyQuoteBar } from './StickyQuoteBar';
+export { BottomDock } from './BottomDock';
