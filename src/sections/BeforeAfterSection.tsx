@@ -297,10 +297,22 @@ function ComparisonSlider({ item, hovered }: { item: BeforeAfter; hovered: boole
         resizeMode="cover"
       />
 
-      <View style={[styles.beforeOverlay, { width: `${position}%` as any }]}>
+      <View
+        style={[
+          styles.beforeOverlay,
+          // Web'de ölçüm beklemeden clipPath ile kırp: before görseli her zaman
+          // tam konteyner genişliğinde kalır → ilk render'da sıkışma/küçülme olmaz.
+          Platform.OS === 'web'
+            ? ({ width: '100%', clipPath: `inset(0 ${100 - position}% 0 0)` } as any)
+            : { width: `${position}%` as any },
+        ]}
+      >
         <Image
           source={item.beforeImage}
-          style={[styles.comparisonImage, containerWidth > 0 && { width: containerWidth }]}
+          style={[
+            styles.comparisonImage,
+            Platform.OS !== 'web' && containerWidth > 0 && { width: containerWidth },
+          ]}
           resizeMode="cover"
         />
       </View>
