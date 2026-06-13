@@ -12,31 +12,16 @@ import {
   scrollToId,
 } from '../utils/pageScroll';
 
-/**
- * Tek koordineli alt dok: yüzen "maliyet" pill'i (mobil) + sağ alt FAB sütunu
- * (Başa Dön üstte, WhatsApp altta). Tek <floating-actions> stack'i.
- *
- * Çakışma çözümü iki katmanlı:
- *  1. Pill açıkken FAB sütunu yukarı kalkar (pill ile çakışmaz).
- *  2. IntersectionObserver: form navigasyonu (Geri/İleri), sonuç CTA'ları
- *     (Keşif/WhatsApp) ve footer ekranın alt bandına girince TÜM stack
- *     opacity ile gizlenir → hiçbir içerik butonunun üstüne binmez.
- *
- * Avoid edilecek öğeler web'de `data-fab-avoid="1"` ile işaretlenir.
- */
+// Tek bir koordineli alt dok: yüzen pill (mobil) + sağ alt FAB sütunu.
+// Pill açıkken FAB sütunu yukarı kalkar; böylece WhatsApp/başa-dön asla
+// pill'in üstüne binmez. Eski WhatsAppFAB + ScrollToTopFAB + StickyQuoteBar
+// yerine geçer.
 
-const INSET = 16; // kenar boşluğu (px)
+const INSET = 16; // kenar boşluğu
 const WA_SIZE = 56; // WhatsApp butonu
 const TOP_SIZE = 44; // başa-dön butonu
-const COL_GAP = 16; // WA üst kenarı ile başa-dön arası → 56+16 = 72px ayrım
+const GAP = 12; // dikey/aralık
 const PILL_H = 52; // yüzen pill yüksekliği
-const AVOID_BAND = 96; // ekran altında "tehlike bandı" yüksekliği (px)
-
-// fixed + safe-area destekli alt konum (yalnızca web'de env() geçerli)
-const safeBottom = (base: number) =>
-  Platform.OS === 'web'
-    ? ({ bottom: `calc(${base}px + env(safe-area-inset-bottom, 0px))` } as any)
-    : { bottom: base };
 
 export function BottomDock() {
   const { colors } = useTheme();
@@ -44,11 +29,9 @@ export function BottomDock() {
 
   const [scrollTopVisible, setScrollTopVisible] = useState(false);
   const [pillVisible, setPillVisible] = useState(false);
-  const [avoidActive, setAvoidActive] = useState(false); // alt CTA/footer görünür mü
   const [hovered, setHovered] = useState<'wa' | 'top' | null>(null);
   const scrollerRef = useRef<HTMLElement | null>(null);
 
-  // --- Scroll: başa-dön ve pill görünürlüğü ---
   useEffect(() => {
     if (Platform.OS !== 'web') return;
     const handleScroll = (e: Event) => {
@@ -59,6 +42,7 @@ export function BottomDock() {
 
       setScrollTopVisible(y > 400);
 
+      // Pill: hero geçildi ve maliyet bölümü görünmüyorsa
       const pastHero = y > window.innerHeight * 0.8;
       const quoteEl = document.getElementById('maliyet-hesapla');
       const r = quoteEl?.getBoundingClientRect();
@@ -69,58 +53,11 @@ export function BottomDock() {
     return () => window.removeEventListener('scroll', handleScroll, { capture: true } as any);
   }, []);
 
-  // --- IntersectionObserver: alt içerik butonları / footer çakışma koruması ---
-  useEffect(() => {
-    if (Platform.OS !== 'web' || typeof IntersectionObserver === 'undefined') return;
-
-    const active = new Set<Element>();
-    // Ekranın alt AVOID_BAND bandına giren öğeleri yakala (altta -%... margin)
-    const io = new IntersectionObserver(
-      (entries) => {
-        for (const en of entries) {
-          if (en.isIntersecting) active.add(en.target);
-          else active.delete(en.target);
-        }
-        setAvoidActive(active.size > 0);
-      },
-      { rootMargin: `0px 0px -${Math.max(0, window.innerHeight - AVOID_BAND)}px 0px`, threshold: 0 }
-    );
-
-    const observed = new Set<Element>();
-    const sync = () => {
-      const els = document.querySelectorAll('[data-fab-avoid="1"]');
-      els.forEach((el) => {
-        if (!observed.has(el)) {
-          observed.add(el);
-          io.observe(el);
-        }
-      });
-      // DOM'dan kalkanları temizle
-      observed.forEach((el) => {
-        if (!el.isConnected) {
-          observed.delete(el);
-          active.delete(el);
-        }
-      });
-    };
-    sync();
-
-    // Wizard adımları/sonuç kartı dinamik render edilir → DOM değişimini izle
-    const mo = new MutationObserver(() => sync());
-    mo.observe(document.body, { childList: true, subtree: true });
-
-    return () => {
-      io.disconnect();
-      mo.disconnect();
-    };
-  }, []);
-
   const isWeb = Platform.OS === 'web';
-  const showPill = isWeb && isMobile && pillVisible && !avoidActive;
-  const hidden = avoidActive; // stack'i tamamen sahne dışına al
+  const showPill = isWeb && isMobile && pillVisible;
 
   // Pill açıkken FAB sütununu pill'in üstüne çıkar
-  const columnBottom = showPill ? INSET + PILL_H + COL_GAP : INSET;
+  const columnBottom = showPill ? INSET + PILL_H + GAP : INSET;
 
   const onScrollTop = () => {
     if (!isWeb) return;
@@ -142,7 +79,7 @@ export function BottomDock() {
           accessibilityRole="button"
           accessibilityLabel="Maliyet hesaplayıcıya git"
           onPress={() => scrollToId('maliyet-hesapla')}
-          style={[styles.pill, safeBottom(INSET), { backgroundColor: colors.primary }]}
+          style={[styles.pill, { backgroundColor: colors.primary }]}
         >
           <MaterialCommunityIcons name="calculator-variant-outline" size={20} color="#FFFFFF" />
           <Text style={styles.pillText}>Maliyetini Hemen Hesapla</Text>
@@ -150,20 +87,8 @@ export function BottomDock() {
         </Pressable>
       )}
 
-      {/* Sağ alt FAB sütunu (floating-actions) */}
-      <View
-        style={[
-          styles.column,
-          safeBottom(columnBottom),
-          {
-            opacity: hidden ? 0 : 1,
-            ...(isWeb
-              ? ({ transitionProperty: 'opacity, bottom', transitionDuration: '250ms' } as any)
-              : {}),
-          },
-        ]}
-        pointerEvents={hidden ? 'none' : 'box-none'}
-      >
+      {/* Sağ alt FAB sütunu */}
+      <View style={[styles.column, { bottom: columnBottom }]} pointerEvents="box-none">
         {scrollTopVisible && (
           <Pressable
             accessibilityRole="button"
@@ -205,9 +130,8 @@ const styles = StyleSheet.create({
     position: fixed,
     right: INSET,
     alignItems: 'center',
-    gap: COL_GAP,
-    // z hiyerarşisi: modaller > mobil menü (1000) > floating (900) > içerik
-    zIndex: 900,
+    gap: GAP,
+    zIndex: 999,
   },
   waFab: {
     width: WA_SIZE,
@@ -242,6 +166,8 @@ const styles = StyleSheet.create({
   },
   pill: {
     position: fixed,
+    bottom: INSET,
+    // FAB sütununa yer bırak: sağda WA genişliği + boşluk kadar
     left: INSET,
     right: INSET,
     height: PILL_H,
@@ -251,7 +177,7 @@ const styles = StyleSheet.create({
     gap: 8,
     paddingHorizontal: 16,
     borderRadius: PILL_H / 2,
-    zIndex: 899,
+    zIndex: 998,
     ...Platform.select({
       web: {
         cursor: 'pointer',

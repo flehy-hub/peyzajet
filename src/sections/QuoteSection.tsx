@@ -135,7 +135,7 @@ export function QuoteSection() {
           {step === 5 && <ResultCard breakdown={breakdown} meta={meta} form={form} />}
         </View>
 
-        <View style={styles.wizardNav} {...(Platform.OS === 'web' ? { dataSet: { fabAvoid: '1' } } : {})}>
+        <View style={styles.wizardNav}>
           {canPrev ? (
             <Pressable onPress={() => setStep(step - 1)} style={styles.navBtnBack}>
               <MaterialCommunityIcons name="arrow-left" size={18} color={p.text} />
@@ -559,7 +559,7 @@ function ResultCard({ breakdown, meta, form }: { breakdown: any; meta: any; form
         )}
       </View>
 
-      <View style={{ gap: Spacing.sm, marginTop: Spacing.md }} {...(Platform.OS === 'web' ? { dataSet: { fabAvoid: '1' } } : {})}>
+      <View style={{ gap: Spacing.sm, marginTop: Spacing.md }}>
         <Pressable
           onPress={() => {
             if (Platform.OS === 'web') {

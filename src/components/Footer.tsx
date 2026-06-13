@@ -49,7 +49,7 @@ export function Footer() {
   };
 
   return (
-    <View style={{ backgroundColor: DARK_BG }} {...(Platform.OS === 'web' ? { dataSet: { fabAvoid: '1' } } : {})}>
+    <View style={{ backgroundColor: DARK_BG }}>
       {/* ===== TOP SECTION: Contact + Image + Newsletter ===== */}
       <View style={[styles.topSection, { paddingHorizontal: Spacing.lg }]}>
         <View style={[styles.topInner, { flexDirection: isMobile ? 'column' : 'row' }]}>
