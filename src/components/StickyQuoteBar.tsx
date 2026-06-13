@@ -50,21 +50,23 @@ export function StickyQuoteBar() {
 const styles = StyleSheet.create({
   bar: {
     position: Platform.OS === 'web' ? ('fixed' as any) : 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
+    // Tam genişlik yerine yüzen pill: sağda WhatsApp FAB'a (right 30 + 60) yer
+    // bırakacak şekilde biter; böylece butonlar üst üste binmez.
+    bottom: 16,
+    left: 12,
+    right: 100,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
     paddingVertical: 14,
-    // sağda WhatsApp FAB ile çakışmaması için geniş yatay boşluk
-    paddingHorizontal: 72,
+    paddingHorizontal: 16,
+    borderRadius: 28,
     zIndex: 997,
     ...Platform.select({
       web: {
         cursor: 'pointer',
-        boxShadow: '0 -2px 12px rgba(0,0,0,0.15)',
+        boxShadow: '0 4px 16px rgba(0,0,0,0.25)',
       } as any,
     }),
   },
